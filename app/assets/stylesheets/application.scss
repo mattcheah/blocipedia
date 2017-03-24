@@ -16,3 +16,13 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+body {
+	padding: 0 10%;
+}
+
+nav {
+	height:40px;
+	background-color:#DDD;
+	padding:10px;
+}
