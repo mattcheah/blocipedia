@@ -10,7 +10,8 @@
 	
 	<nav id="navbar">
 		<div id="nav-links" class="pull-left">
-			<li><%= link_to "Home", welcome_index_path %></li>
+			<li><%= link_to "Home", root_path %></li>
+			<li><%= link_to "Wikis", wikis_path %></li>
 		</div>
 		<div id="user-nav" class="pull-right">
 			<% if user_signed_in? %>
@@ -21,9 +22,13 @@
 		</div>
 	</nav>
 	
-	<p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
+	<% if notice %>
+	<div class="alert alert-success" role="alert"><%= notice %></div>
+	<% end %>
+	<% if alert %>
+    <div class="alert alert-danger"><%= alert %></div>
+	<% end %>
+	
 <%= yield %>
 
 </body>

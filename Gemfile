@@ -15,13 +15,16 @@ source 'https://rubygems.org'
 
  group :development, :test do
    gem 'byebug'
-   gem 'web-console', '~> 2.0'
    gem 'spring'
    gem 'rspec-rails'
    gem 'shoulda'
    gem 'faker'
    gem 'factory_girl_rails'
    gem 'pry-rails'
+ end
+ 
+ group :test do
+ 	gem "nyan-cat-formatter"
  end
  
  gem 'sass-rails', '~> 5.0'

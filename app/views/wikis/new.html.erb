@@ -1,0 +1,32 @@
+<h1>Create a New Wiki Page</h1>
+<div id="title-divider"></div>
+<div class="row">
+	<div class="col-md-6">
+		
+		<%= form_for @wiki do |f| %>
+			<div class="form-group">
+				<%= f.label 'Wiki Title' %>
+				<%= f.text_field :title, class: "form-control" %> 
+			</div>
+			<div class="form-group">
+				<%= f.label 'Wiki Body' %>
+				<%= f.text_area :body, class: "form-control" %> 
+			</div>
+			<div class="form-group">
+				<%= check_box_tag(:private) %>
+				<%= label_tag(:private, "Is this Wiki Private?") %>
+			</div>
+			<div class="form-group">
+				<%= f.submit "Submit", class: "btn btn-primary" %>
+			</div>
+			
+		<% end %>
+
+	</div>
+	<div class="col-md-6">
+		<h3>Use Markdown to create your Wiki Page: </h3>
+		<p>
+			
+		</p>
+	</div>
+</div>
