@@ -21,6 +21,7 @@ source 'https://rubygems.org'
    gem 'faker'
    gem 'factory_girl_rails'
    gem 'pry-rails'
+   gem 'faker'
  end
  
  group :test do
@@ -36,3 +37,4 @@ source 'https://rubygems.org'
  gem 'figaro'
  gem 'devise'
  gem 'pundit'
+ 

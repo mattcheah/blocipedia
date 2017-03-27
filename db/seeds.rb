@@ -6,13 +6,14 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create!(email: "User1@blocipedia.com", password: "password", password_confirmation: "password")
-
+10.times do
+	User.create!(email: "#{Faker::Name.unique.first_name}@blocipedia.com", password: "password", password_confirmation: "password")
+end
 #Create 5 wikis
-i = 1
-5.times do 
-	Wiki.create!(title: "Wiki ##{i}", body: "This is the body for Wiki ##{i}, and this has a lot of information.", private: false, user: User.first)
-	i += 1
+
+10.times do 
+	Wiki.create!(title: Faker::StarWars.vehicle + " on " + Faker::StarWars.planet, body: '"'+Faker::StarWars.quote+'" - ' + Faker::StarWars.character, private: false, user: User.first)
 end
 
 puts "#{Wiki.all.length} Wikis generated"
+puts "#{User.all.length} Users generated"
