@@ -7,36 +7,102 @@ RSpec.describe WikisController, type: :controller do
 	let(:wikis) { Wiki.all }
 	
 	context "guest" do
-		
+		before do
+			sign_out :user
+		end
 		
 		describe "GET index" do
-			it "returns HTTP redirect" do
+			it "returns HTTP success" do
 				get :index
-				expect(response).to have_http_status(:redirect)
+				expect(response).to have_http_status(:success)
 			end
 			
-			it "renders the sign in template" do
+			it "renders the index template" do
 				get :index
-				expect(response).to redirect_to("/users/sign_in")
+				expect(response).to render_template(:index)
 			end
 			
 		end	
 		
 		describe "GET show" do
-			it "returns HTTP redirect" do
+			it "returns HTTP success" do
 				get :show, id: my_wiki.id
-				expect(response).to have_http_status(:redirect)
+				expect(response).to have_http_status(:success)
 			end
 			
 			it "renders the sign in  template" do
 				get :show, id: my_wiki.id
-				expect(response).to redirect_to("/users/sign_in")
+				expect(response).to render_template(:show)
 			end
-			
 		end	
+		
+		describe "GET new" do
+=begin
+			it "returns HTTP redirect" do
+				get :new
+				expect(response).to have_http_status(:redirect)
+			end
+=end
+			it "renders the sign_in template" do
+				get :new
+				expect(response).to render_template("users/sign_up")
+			end
+		end
+		
+		describe "POST create" do
+
+=begin
+			it "returns HTTP redirect" do
+				create(:wiki)
+				expect(response).to have_http_status(:redirect)
+			end
+=end
+
+			it "renders the sign_in template" do
+				create(:wiki)
+				expect(response).to render_template("users/sign_up")
+			end
+		end
+		
+		describe "GET edit" do
+=begin
+			it "returns HTTP redirect" do
+				get :edit, id: my_wiki.id
+				expect(response).to have_http_status(:redirect)
+			end
+=end
+			it "renders the sign_in template" do
+				get :edit, id: my_wiki.id
+				expect(response).to render_template("users/sign_up")
+			end
+		end
+		
+		describe "PUT update" do
+=begin
+			it "returns HTTP redirect" do
+				put :update, id: my_wiki.id, wiki: {title: "my test title - updated!", body: "my wiki body here", private: false}
+				expect(response).to have_http_status(:redirect)
+			end
+=end
+
+			it "renders the sign_in template" do
+				put :update, id: my_wiki.id, wiki: {title: "my test title - updated!", body: "my wiki body here", private: false}
+				expect(response).to render_template("users/sign_up")
+			end
+		end
+		
+		describe "DELETE destroy" do
+			it "does not destroy the object" do
+				newwiki = create(:wiki)
+				delete :destroy, {id: newwiki.id}
+				expect(Wiki.where({id: newwiki.id}).count).to eq 1
+			end
+		end
+		
+		
 	end
 
-	context "signed in user" do
+	context "signed in standard user" do
 		before do
 			my_user = User.create!({email: 'my_user@bloccipedia.com', password: 'password', password_confirmation: 'password'})
 			sign_in my_user
@@ -151,17 +217,15 @@ RSpec.describe WikisController, type: :controller do
 		
 		describe "DELETE destroy" do
 			
-			it "deletes the wiki object" do
+			it "destroys the object" do
 				delete :destroy, id: my_wiki.id
-				count = Wiki.where(id = my_wiki.id).count
-				
-				expect(count).to eq(0)
+				expect(Wiki.where(id: my_wiki.id).count).to eq 0
 			end
 			
 			
-			it "redirects to the :index template" do 
+			it "renders the index template" do 
 				delete :destroy, id: my_wiki.id
-				expect(response).to redirect_to(wikis_url)	
+				expect(response).to redirect_to('/wikis')
 			end
 		end
 	end

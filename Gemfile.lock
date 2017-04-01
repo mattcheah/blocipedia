@@ -205,7 +205,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   devise
-  factory_girl_rails
+  factory_girl_rails (~> 4.0)
   faker
   figaro
   jquery-rails

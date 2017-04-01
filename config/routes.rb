@@ -1,8 +1,24 @@
 Rails.application.routes.draw do
 	devise_for :users
+	devise_scope :user do
+    	get 'users/upgrade', :to => 'devise/registrations#upgrade'
+	end
+	
+=begin
+    devise_for :users, controllers: {
+		sessions: 'users/sessions'
+    }
+=end
+
 	root 'welcome#index'
 	
+	authenticate :user do
+		resources :wikis, only: [:new, :create, :edit, :update, :destroy]
+	end
+	
+	
 	resources :wikis
+	
 	
 	  
 	

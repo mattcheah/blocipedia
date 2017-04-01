@@ -1,7 +1,5 @@
 class WikisController < ApplicationController
 	
-	#before_action :authenticate_user!
-	
 	def index
 		@wikis = Wiki.all
 	end
@@ -15,7 +13,6 @@ class WikisController < ApplicationController
 	end
 	
 	def create
-		
 		@wiki = Wiki.new(wiki_params)
 		
 		if @wiki.save
@@ -25,28 +22,15 @@ class WikisController < ApplicationController
 			flash[:alert] = "Oops, something went wrong. Please Try Again!"
 			render :new
 		end
-		
 	end
 	
 	def edit
-		unless WikiPolicy.new(current_user, @wiki).update?
-			flash[:alert] = "You must be signed in to edit a wiki page!"
-			redirect_to new_user_session_path
-		end
-		
 		@wiki = Wiki.find(params[:id])	
-		
 	end
 	
 	def update
 		@wiki = Wiki.find(params[:id])
 		@wiki.assign_attributes(wiki_params)
-		
-		unless WikiPolicy.new(current_user, @wiki).update?
-			flash[:alert] = "You must be signed in to edit a wiki page!"
-			redirect_to new_user_session_path
-		end
-
 		
 		if @wiki.save
 			flash[:notice] = "You have edited your wiki!"
@@ -58,6 +42,7 @@ class WikisController < ApplicationController
 	end
 	
 	def destroy
+		
 		@wiki = Wiki.find(params[:id])
 		
 		if @wiki.delete

@@ -6,7 +6,12 @@ class WikiPolicy < ApplicationPolicy
 		@wiki = wiki
 	end
 	
-	def update?
-		user.present?
+	def premium?
+		@user.premium? || @user.admin?
 	end
+	
+	def admin?
+		@user.admin?
+	end
+	
 end
