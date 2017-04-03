@@ -1,5 +1,7 @@
 class ChargesController < ApplicationController
 	
+	before_action :authenticate_user!
+	
 	def new
 		redirect_to users_upgrade_path
 	end
