@@ -8,7 +8,16 @@ RSpec.describe WikisController, type: :controller do
 	
 	context "guest" do
 		before do
-			sign_out :user
+			if user_signed_in?
+				sign_out current_user
+				puts "user was signed in"
+			end
+			
+			if current_user
+				puts "current_user was signed in"
+				sign_out current_user
+			end
+		
 		end
 		
 		describe "GET index" do

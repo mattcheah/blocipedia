@@ -1,1 +1,15 @@
+
 <h1>Upgrade User Account - <%= @user.email %></h1>
+
+<p> Thank you for choosing to become a premium member! The total cost for this membership is $15 dollars a month.</p>
+<p>Please fill out your credit card information so we can start charging you as soon as possible.</p>
+
+<%= form_tag charges_path do %>
+	<H4 class="text-center">Click to enter credit card information</H4>
+	<script class="stripe-button text-center" 
+		src="https://checkout.stripe.com/checkout.js" 
+		data-key="<%= @stripe_btn_data[:key] %>" 
+		data-amount="<%= @stripe_btn_data[:amount] %>" 
+		data-description="<%= @stripe_btn_data[:description] %>">
+	</script>
+<% end %>

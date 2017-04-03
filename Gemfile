@@ -18,7 +18,6 @@ source 'https://rubygems.org'
    gem 'spring'
    gem 'rspec-rails'
    gem 'shoulda'
-   gem 'faker'
    gem 'factory_girl_rails', "~> 4.0"
    gem 'pry-rails'
    gem 'faker'
@@ -37,4 +36,6 @@ source 'https://rubygems.org'
  gem 'figaro'
  gem 'devise'
  gem 'pundit'
+ gem 'stripe'
+ 
  
