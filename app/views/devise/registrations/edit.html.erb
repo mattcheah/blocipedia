@@ -46,7 +46,6 @@
 	</div>
 	
 	<div class="col-md-5">
-
 		<% if current_user.admin? %>
 		
 			<h1 class="text-center">You are an Admin</h1>
@@ -55,7 +54,13 @@
 		
 			<h1 class="text-center">Thank you for being a Blocipedia supporter!</h1>
 			<p>Your donation helps fund my pringles habit</p>
+			
+			<p>Cancel My Membership:</p>
+			<%= button_to "Downgrade to Standard User", users_downgrade_path, class: "btn btn-large btn-danger text-center", method: :post, data: { confirm: "Are you sure you want to downgrade to a standard membership?" } %>
 		
+		<% elsif current_user.authenticating? %>
+			<h1>Authenticating your Account...</h1>
+			<p>When you reload the page you will probably be registered as a premium user.</p>
 		<% else %>
 		
 			<h1 class="text-center">Want to upgrade?</h1>

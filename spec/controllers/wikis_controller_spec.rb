@@ -8,14 +8,14 @@ RSpec.describe WikisController, type: :controller do
 	
 	context "guest" do
 		before do
-			if user_signed_in?
-				sign_out current_user
+			if subject.user_signed_in?
+				subject.sign_out subject.current_user
 				puts "user was signed in"
 			end
 			
-			if current_user
+			if subject.current_user
 				puts "current_user was signed in"
-				sign_out current_user
+				subject.sign_out subject.current_user
 			end
 		
 		end
@@ -54,7 +54,7 @@ RSpec.describe WikisController, type: :controller do
 =end
 			it "renders the sign_in template" do
 				get :new
-				expect(response).to render_template("users/sign_up")
+				expect(response).to redirect_to("/users/sign_in")
 			end
 		end
 		
@@ -69,7 +69,7 @@ RSpec.describe WikisController, type: :controller do
 
 			it "renders the sign_in template" do
 				create(:wiki)
-				expect(response).to render_template("users/sign_up")
+				expect(response).to redirect_to("/users/sign_in")
 			end
 		end
 		
@@ -82,7 +82,7 @@ RSpec.describe WikisController, type: :controller do
 =end
 			it "renders the sign_in template" do
 				get :edit, id: my_wiki.id
-				expect(response).to render_template("users/sign_up")
+				expect(response).to redirect_to("/users/sign_in")
 			end
 		end
 		
@@ -96,7 +96,7 @@ RSpec.describe WikisController, type: :controller do
 
 			it "renders the sign_in template" do
 				put :update, id: my_wiki.id, wiki: {title: "my test title - updated!", body: "my wiki body here", private: false}
-				expect(response).to render_template("users/sign_up")
+				expect(response).to redirect_to("/users/sign_in")
 			end
 		end
 		

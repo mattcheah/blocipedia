@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 	
 	devise_scope :user do
     	get 'users/upgrade', :to => 'user/registrations#upgrade'
+    	post 'users/downgrade', :to => 'user/registrations#downgrade'
 	end
 	
 	authenticate :user do
@@ -17,6 +18,9 @@ Rails.application.routes.draw do
 	
 	resources :wikis
 	resources :charges, only: [:new, :create]
+	
+
+	post '/stripe', :to => 'webhooks#receive'
 	
 	  
 	

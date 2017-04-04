@@ -44,15 +44,20 @@ class WikisController < ApplicationController
 	end
 	
 	def destroy
-		
-		@wiki = Wiki.find(params[:id])
-		
-		if @wiki.delete
-			flash[:notice] = "Wiki successfully deleted!"
-			redirect_to wikis_url
+
+		if current_user.admin?
+			@wiki = Wiki.find(params[:id])
+			
+			if @wiki.delete
+				flash[:notice] = "Wiki successfully deleted!"
+				redirect_to wikis_url
+			else
+				flash.now[:alert] =  "Wiki could not be deleted, please try again"
+				render :edit
+			end
 		else
-			flash.now[:alert] =  "Wiki could not be deleted, please try again"
-			render :show
+			flash[:notice] = "You must be an admin to peform this action"
+			redirect_to edit_wiki_path
 		end
 	end
 		

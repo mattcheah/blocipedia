@@ -5,12 +5,26 @@ class User::RegistrationsController < Devise::RegistrationsController
   #GET /user/upgrade
   def upgrade
 	@user = current_user
+	a = Amount.new()
 	@stripe_btn_data = {
   		key: "#{Rails.configuration.stripe[:publishable_key]}",
   		description: "Blocipedia Premium Membership - #{@user.email}",
-  		amount: 1500
+  		amount: a.default
   	}
-  	
+  end
+  
+  def downgrade
+  	@user = current_user
+	@user.standard!
+	
+	if @user.role == "standard"
+		flash[:notice] = "You have downgraded to a standard account. You will not be charged next month."
+		redirect_to edit_user_registration_path
+	else
+		flash.now[:alert] = "Your account was unable to be downgraded, please try again."
+		render edit_user_registration_path
+	end
+		
   end
 
   # GET /resource/sign_up
