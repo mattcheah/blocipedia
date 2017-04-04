@@ -46,12 +46,7 @@ RSpec.describe WikisController, type: :controller do
 		end	
 		
 		describe "GET new" do
-=begin
-			it "returns HTTP redirect" do
-				get :new
-				expect(response).to have_http_status(:redirect)
-			end
-=end
+
 			it "renders the sign_in template" do
 				get :new
 				expect(response).to redirect_to("/users/sign_in")
@@ -60,13 +55,6 @@ RSpec.describe WikisController, type: :controller do
 		
 		describe "POST create" do
 
-=begin
-			it "returns HTTP redirect" do
-				create(:wiki)
-				expect(response).to have_http_status(:redirect)
-			end
-=end
-
 			it "renders the sign_in template" do
 				create(:wiki)
 				expect(response).to redirect_to("/users/sign_in")
@@ -74,12 +62,7 @@ RSpec.describe WikisController, type: :controller do
 		end
 		
 		describe "GET edit" do
-=begin
-			it "returns HTTP redirect" do
-				get :edit, id: my_wiki.id
-				expect(response).to have_http_status(:redirect)
-			end
-=end
+
 			it "renders the sign_in template" do
 				get :edit, id: my_wiki.id
 				expect(response).to redirect_to("/users/sign_in")
@@ -87,12 +70,7 @@ RSpec.describe WikisController, type: :controller do
 		end
 		
 		describe "PUT update" do
-=begin
-			it "returns HTTP redirect" do
-				put :update, id: my_wiki.id, wiki: {title: "my test title - updated!", body: "my wiki body here", private: false}
-				expect(response).to have_http_status(:redirect)
-			end
-=end
+
 
 			it "renders the sign_in template" do
 				put :update, id: my_wiki.id, wiki: {title: "my test title - updated!", body: "my wiki body here", private: false}
@@ -226,15 +204,37 @@ RSpec.describe WikisController, type: :controller do
 		
 		describe "DELETE destroy" do
 			
-			it "destroys the object" do
+			it "does not destroy the object" do
 				delete :destroy, id: my_wiki.id
-				expect(Wiki.where(id: my_wiki.id).count).to eq 0
+				expect(Wiki.where(id: my_wiki.id).count).to eq 1
 			end
 			
 			
-			it "renders the index template" do 
+			it "renders the edit template" do 
 				delete :destroy, id: my_wiki.id
-				expect(response).to redirect_to('/wikis')
+				expect(response).to redirect_to edit_wiki_path
+			end
+		end
+	end
+	
+	context "signed in standard user" do
+		before do
+			my_user = User.create!({email: 'my_user@bloccipedia.com', password: 'password', password_confirmation: 'password'})
+			my_user.admin!
+			sign_in my_user
+		end
+		
+		describe "DELETE destroy" do
+			it "destroys the object" do
+				this_wiki = create(:wiki)
+				delete :destroy, id: this_wiki.id
+				expect(Wiki.where(id: this_wiki.id).count).to eq 0
+			end
+			
+			it "renders the index template" do 
+				this_wiki = create(:wiki)
+				delete :destroy, id: this_wiki.id
+				expect(response).to redirect_to wikis_path
 			end
 		end
 	end
