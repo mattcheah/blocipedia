@@ -12,7 +12,7 @@
 			</div>
 			<div class="form-group">
 				<%= f.label 'Wiki Body' %>
-				<%= f.text_area :body, class: "form-control" %> 
+				<%= f.text_area :body, class: "form-control", rows: 15 %> 
 			</div>
 			
 			<% if current_user.admin? || current_user.premium? %>
@@ -27,10 +27,27 @@
 			</div>
 			
 		<% end %>
+		<%= button_to "Delete This Wiki", @wiki, method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete \"#{@wiki.title}\"?" } %>
 	</div>
 	
 	<div class="col-md-6">
-		<%= button_to "Delete This Wiki", @wiki, method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete \"#{@wiki.title}\"?" } %>
+		<h3>Use Markdown to edit your Wiki Page: </h3>
+		<p><strong>Headers:</strong></p>
+		<p>Add a pound sign before text to create header text. More pound signs make the text smaller.</p>
+		<p># Big Header 1</p>
+		<p>## Header 2</p>
+		<p>### Header 3, etc. </p>
+		<p><strong>Bold and Italics:</strong></p>
+		<p>Add asterisks or underscores around words phrases to bold and italicize them</p>
+		<p>**Bold**</p>
+		<p>*Italics*</p>
+		<p><strong>Lists:</strong></p>
+		<p>Add a dash before text to create bullet points, and a number before your text to create an ordered list.</p>
+		<p>- Unordered List</p>
+		<p>&nbsp;&nbsp;- Nested list (added space before the dash)</p>
+		<p>1. Ordered list</p>
+		<p>2. Ordered list</p>
+		<p>&nbsp;&nbsp;1. Nested Ordered list</p>
 	</div>
 	
 </div>

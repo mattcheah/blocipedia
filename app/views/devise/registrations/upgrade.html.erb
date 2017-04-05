@@ -1,7 +1,7 @@
 
 <h1>Upgrade User Account - <%= @user.email %></h1>
 
-<p> Thank you for choosing to become a premium member! The total cost for this membership is $<%= Amount.new().default %> dollars a month.</p>
+<p> Thank you for choosing to become a premium member! The total cost for this membership is $<%= Amount.default %> dollars a month.</p>
 <p>Please fill out your credit card information so we can start charging you as soon as possible.</p>
 
 <%= form_tag charges_path do %>

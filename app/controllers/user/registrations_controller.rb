@@ -5,11 +5,10 @@ class User::RegistrationsController < Devise::RegistrationsController
   #GET /user/upgrade
   def upgrade
 	@user = current_user
-	a = Amount.new()
 	@stripe_btn_data = {
   		key: "#{Rails.configuration.stripe[:publishable_key]}",
   		description: "Blocipedia Premium Membership - #{@user.email}",
-  		amount: a.default
+  		amount: Amount.default
   	}
   end
   

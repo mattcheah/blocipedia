@@ -1,8 +1,6 @@
 <h1>List of All Wikis</h1>
 <div id="title-divider"></div>
 <div>
-	Here is the list.
-	I swear its here
 	<div class="row">
 		
 		<div class="col-md-10">
@@ -10,7 +8,7 @@
 			<% @wikis.each do |wiki| %>
 				<div class="wiki-container">
 					<h3><%= link_to wiki.title, wiki_path(wiki.id), method: :get %></h3>
-					<p class="wiki-body"><%= wiki.body %></p>
+					<p class="wiki-body"><%= truncate(markdown_strip(wiki.body), length: 200) %></p>
 				</div>
 			<% end %>
 	

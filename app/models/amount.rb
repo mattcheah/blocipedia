@@ -1,6 +1,9 @@
-class Amount < ActiveRecord::Base
+class Amount
 	
-	def default
-		default = 2000
+	class << self # Class methods
+		def default
+			2000
+		end
 	end
+	
 end

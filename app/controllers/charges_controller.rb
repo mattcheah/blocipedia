@@ -10,7 +10,7 @@ class ChargesController < ApplicationController
 	  
 		unless current_user.admin? || current_user.premium?
 		  
-			a = Amount.new()
+			
 			@customer = Stripe::Customer.create(
 			  email: current_user.email,
 			  card: params[:stripeToken]
@@ -18,7 +18,7 @@ class ChargesController < ApplicationController
 			
 			@charge = Stripe::Charge.create(
 			  customer: @customer.id,
-			  amount: a.default,
+			  amount: Amount.default,
 			  description: "Blocipedia Premium Membership - #{current_user.email}",
 			  currency: "usd"
 			)

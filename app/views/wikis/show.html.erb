@@ -4,7 +4,7 @@
 		
 	<div id="wiki-body" class="col-md-9">
 		<p>Wiki created by: <%= User.find_by_id(@wiki.user_id).email %></p>
-		<%= @wiki.body %>
+		<%= markdown(@wiki.body) %>
 	</div>
 	<div class="col-md-3">
 		<%= button_to "Edit This Wiki", edit_wiki_path, method: :get, class: "btn btn-primary" %>
