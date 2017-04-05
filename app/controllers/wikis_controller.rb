@@ -3,11 +3,15 @@ class WikisController < ApplicationController
 	before_action :authenticate_user!, :except => [:index, :show]
 	
 	def index
-		@wikis = Wiki.all
+		@wikis = authorized_wikis
 	end
 	
 	def show
 		@wiki = Wiki.find(params[:id])
+		if @wiki.private? && (current_user.standard? || current_user.authenticating? )
+			flash[:notice] = "You must be an admin or a premium user to view this private wiki"
+			redirect_to wikis_path
+		end
 	end
 	
 	def new
@@ -16,6 +20,8 @@ class WikisController < ApplicationController
 	
 	def create
 		@wiki = Wiki.new(wiki_params)
+		@wiki.user_id = current_user.id
+		#@wiki.private = params[:private]
 		
 		if @wiki.save
 			flash[:notice] = "You have successfully created a new wiki!"
@@ -33,6 +39,7 @@ class WikisController < ApplicationController
 	def update
 		@wiki = Wiki.find(params[:id])
 		@wiki.assign_attributes(wiki_params)
+		#@wiki.private = params[:private]
 		
 		if @wiki.save
 			flash[:notice] = "You have edited your wiki!"
@@ -65,6 +72,14 @@ class WikisController < ApplicationController
 	
 	def wiki_params
 		params.require(:wiki).permit(:title, :body, :private)
+	end
+	
+	def authorized_wikis
+		if current_user && (current_user.admin? || current_user.premium?)
+			Wiki.all
+		else 
+			Wiki.where.not(private: true)
+		end
 	end
 	
 end

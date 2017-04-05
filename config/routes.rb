@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	devise_for :users, controllers: { registrations: 'user/registrations' }
 	
 	devise_scope :user do
+		get 'users/edit', :to => 'user/registrations#edit'
     	get 'users/upgrade', :to => 'user/registrations#upgrade'
     	post 'users/downgrade', :to => 'user/registrations#downgrade'
 	end

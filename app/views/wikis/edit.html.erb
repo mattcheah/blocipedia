@@ -14,12 +14,16 @@
 				<%= f.label 'Wiki Body' %>
 				<%= f.text_area :body, class: "form-control" %> 
 			</div>
+			
+			<% if current_user.admin? || current_user.premium? %>
+				<div class="form-group">
+					<%= f.check_box(:private) %>
+					<%= label_tag(:private, "Private Wiki?") %>
+				</div>
+			<% end %>
+			
 			<div class="form-group">
-				<%= check_box_tag(:private) %>
-				<%= label_tag(:private, "Is this Wiki Private?") %>
-			</div>
-			<div class="form-group">
-				<%= f.submit "Edit", class: "btn btn-primary" %>
+				<%= f.submit "Finish Editing", class: "btn btn-primary" %>
 			</div>
 			
 		<% end %>

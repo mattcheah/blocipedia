@@ -1,8 +1,9 @@
-<h1 id="wiki-title"><%= @wiki.title %></h1>
+<h1 id="wiki-title"><%= @wiki.title %> <%= "(private)" if @wiki.private %></h1>
 <div id="title-divider"></div>
 <div class="row">
 		
 	<div id="wiki-body" class="col-md-9">
+		<p>Wiki created by: <%= User.find_by_id(@wiki.user_id).email %></p>
 		<%= @wiki.body %>
 	</div>
 	<div class="col-md-3">

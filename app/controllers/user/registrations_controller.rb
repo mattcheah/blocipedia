@@ -15,16 +15,35 @@ class User::RegistrationsController < Devise::RegistrationsController
   
   def downgrade
   	@user = current_user
-	@user.standard!
-	
-	if @user.role == "standard"
-		flash[:notice] = "You have downgraded to a standard account. You will not be charged next month."
+
+  	if @user.admin?
+  		flash[:notice] = "You are an admin and cannot be downgraded!"
 		redirect_to edit_user_registration_path
-	else
-		flash.now[:alert] = "Your account was unable to be downgraded, please try again."
-		render edit_user_registration_path
-	end
+  	elsif @user.standard?
+  		flash[:notice] = "You are already a standard user!"
+		redirect_to edit_user_registration_path
+  	elsif @user.premium?
+  	
+		@user.standard!
 		
+		@user_wikis = Wiki.where(user_id: @user.id)
+	
+		@user_wikis.each do |wiki|
+			wiki.private = false
+			wiki.save
+		end
+		
+		if @user.role == "standard"
+			flash[:notice] = "You have downgraded to a standard account. You will not be charged next month."
+			redirect_to edit_user_registration_path
+			
+		else
+			flash.now[:alert] = "Your account was unable to be downgraded, please try again."
+			render edit_user_registration_path
+		end
+	end
+	return
+	
   end
 
   # GET /resource/sign_up
@@ -38,9 +57,10 @@ class User::RegistrationsController < Devise::RegistrationsController
   # end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+   def edit
+     #super
+     @my_wikis = Wiki.where(user_id: current_user.id)
+   end
 
   # PUT /resource
   # def update
