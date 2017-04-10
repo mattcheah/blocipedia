@@ -27,7 +27,37 @@
 			</div>
 			
 		<% end %>
-		<%= button_to "Delete This Wiki", @wiki, method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete \"#{@wiki.title}\"?" } %>
+		
+		<% if policy(@wiki).delete? %>
+			<%= button_to "Delete This Wiki", @wiki, method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete \"#{@wiki.title}\"?" } %>
+		<% end %>
+		
+		
+		<br><br>
+		<% if @wiki.private && ((current_user.premium? && @wiki.user_id == current_user.id) || current_user.admin?) %>
+			<h3>Add Collaborators to this Wiki:</h3>
+			<p>Enter an email to add a collaborator to the wiki so they can work on it when it is private.</p>
+			
+			<%= form_tag '/collaborators', method: :post do %>
+				<%= text_field_tag 'email', nil, placeholder: "Enter the email of the user you want to add as a collaborator" %>
+				<%= hidden_field_tag :id, @wiki.id %>
+				<%= button_tag "Add Collaborator" %>
+			<% end %> 
+			
+		
+			<h3>Collaborators on this wiki:</h3>
+			<ul>
+			<% @collaborators.each do |user_id| %>
+				<li>
+					<%= "#{User.find(user_id).email}" %> 
+					<% if current_user.admin? || @wiki.user_id == current_user.id %>
+						<%= button_to "Remove Collaborator", collaborator_path(id: Collaborator.where(wiki_id:@wiki.id, user_id:user_id).first), method: :delete, class: "btn btn-warning" %>
+					<% end %>
+				</li>
+			<% end %>
+			</ul>
+		
+		<% end %>
 	</div>
 	
 	<div class="col-md-6">

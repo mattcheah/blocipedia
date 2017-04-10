@@ -21,3 +21,14 @@
 
 en:
   hello: "Hello world"
+  pundit:
+    default: 'You are not authorized to perform this action.'
+    wiki_policy:
+      new?: 'You must be signed in to create create posts!'
+      create?: 'You must be signed in to create create posts!'
+      edit?: 'You must be signed in to edit this post!'
+      update?: 'You must be signed in to edit this post!'
+      destroy?: 'You must be an admin to delete posts!'
+    collaborator_policy:
+      create?: 'You must be the owner of this wiki in order to add collaborators!'
+      destroy?: 'You must be the owner of this wiki in order to delete collaborators!'

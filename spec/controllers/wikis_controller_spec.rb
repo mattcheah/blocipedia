@@ -202,6 +202,8 @@ RSpec.describe WikisController, type: :controller do
 		
 		end
 		
+		
+		
 		describe "DELETE destroy" do
 			
 			it "does not destroy the object" do
@@ -216,8 +218,9 @@ RSpec.describe WikisController, type: :controller do
 			end
 		end
 	end
+		
 	
-	context "signed in standard user" do
+	context "signed in admin user" do
 		before do
 			my_user = User.create!({email: 'my_user@bloccipedia.com', password: 'password', password_confirmation: 'password'})
 			my_user.admin!
@@ -226,6 +229,8 @@ RSpec.describe WikisController, type: :controller do
 		
 		describe "DELETE destroy" do
 			it "destroys the object" do
+				
+				
 				this_wiki = create(:wiki)
 				delete :destroy, id: this_wiki.id
 				expect(Wiki.where(id: this_wiki.id).count).to eq 0

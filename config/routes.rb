@@ -13,14 +13,13 @@ Rails.application.routes.draw do
 	end
 	
 	authenticate :user do
-		resources :wikis, only: [:new, :create, :edit, :update, :destroy]
+		#resources :wikis, only: [:new, :create, :edit, :update, :destroy]
 		resources :charges
 	end
 	
 	resources :wikis
+	resources :collaborators, only: [:create, :destroy]
 	resources :charges, only: [:new, :create]
-	
-
 	post '/stripe', :to => 'webhooks#receive'
 	
 	  

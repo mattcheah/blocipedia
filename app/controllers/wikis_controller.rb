@@ -1,22 +1,29 @@
 
 class WikisController < ApplicationController
 	
-	before_action :authenticate_user!, :except => [:index, :show]
+	#before_action :authenticate_user!, :except => [:index, :show]
+	rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 	
 	def index
-		@wikis = Wiki.all
+		@wikis = policy_scope(Wiki)
 	end
 	
 	def show
+
 		@wiki = Wiki.find(params[:id])
 	end
 	
 	def new
 		@wiki = Wiki.new
+		authorize @wiki
 	end
 	
 	def create
 		@wiki = Wiki.new(wiki_params)
+		authorize @wiki
+		
+		@wiki.user_id ||= current_user.id
+		@wiki.private ||= false
 		
 		if @wiki.save
 			flash[:notice] = "You have successfully created a new wiki!"
@@ -28,11 +35,15 @@ class WikisController < ApplicationController
 	end
 	
 	def edit
-		@wiki = Wiki.find(params[:id])	
+		@wiki = Wiki.find(params[:id])
+		@collaborators = User.where(id: @wiki.collaborators.pluck(:user_id))
+		authorize @wiki
 	end
 	
 	def update
 		@wiki = Wiki.find(params[:id])
+		authorize @wiki
+		
 		@wiki.assign_attributes(wiki_params)
 		
 		if @wiki.save
@@ -40,25 +51,20 @@ class WikisController < ApplicationController
 			redirect_to @wiki
 		else 
 			flash.now[:alert] = "Oops, something went wrong. Please Try Again!"
-			render :edit
+			return
 		end
 	end
 	
 	def destroy
-
-		if current_user.admin?
-			@wiki = Wiki.find(params[:id])
-			
-			if @wiki.delete
-				flash[:notice] = "Wiki successfully deleted!"
-				redirect_to wikis_url
-			else
-				flash.now[:alert] =  "Wiki could not be deleted, please try again"
-				render :edit
-			end
+		@wiki = Wiki.find(params[:id])
+		authorize @wiki
+		
+		if @wiki.delete
+			flash[:notice] = "Wiki successfully deleted!"
+			redirect_to wikis_url
 		else
-			flash[:notice] = "You must be an admin to peform this action"
-			redirect_to edit_wiki_path
+			flash.now[:alert] =  "Wiki could not be deleted, please try again"
+			return redirect_to wikis_url
 		end
 	end
 		
@@ -68,4 +74,17 @@ class WikisController < ApplicationController
 		params.require(:wiki).permit(:title, :body, :private)
 	end
 	
+	def user_not_authorized(exception)
+		policy_name = exception.policy.class.to_s.underscore
+		
+		flash[:alert] = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
+		case exception.query
+		when "destroy?"
+			redirect_to(edit_wiki_path)
+		else
+			redirect_to(new_user_session_path)
+		end
+	end
+	
 end
+
